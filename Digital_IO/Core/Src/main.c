@@ -101,12 +101,19 @@ int main(void)
 	  if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0)){
 	  	  button_pressed = 1;
 	  }
-
+	  // blink 4 lights in a circle when button is pressed
+	  // !HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) makes it only happen once
 	  if(!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) && button_pressed){
-	  	  	  button_pressed = 0;
-	  		  HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_13|GPIO_PIN_15);
-	  		  HAL_Delay(1000);
-	  		  HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_13| GPIO_PIN_15);
+		  button_pressed = 0;
+		  HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_13);
+		  HAL_Delay(500);
+		  HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_13| GPIO_PIN_12);
+		  HAL_Delay(500);
+		  HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_12| GPIO_PIN_15);
+		  HAL_Delay(500);
+		  HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_15| GPIO_PIN_14);
+		  HAL_Delay(500);
+		  HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_14);
 	  	  }
 
 	  // Toggle LED, if off -> turns on, if on -> turn
@@ -180,7 +187,7 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13|GPIO_PIN_15, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : PA0 */
   GPIO_InitStruct.Pin = GPIO_PIN_0;
@@ -188,8 +195,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PD13 PD15 */
-  GPIO_InitStruct.Pin = GPIO_PIN_13|GPIO_PIN_15;
+  /*Configure GPIO pins : PD12 PD13 PD14 PD15 */
+  GPIO_InitStruct.Pin = GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
